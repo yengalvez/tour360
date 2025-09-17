@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tour360 Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4.0.6/dist/photo-sphere-viewer.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4.0.6/dist/plugins/markers.min.css"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="hero">
+        <div>
+          <p class="hero-kicker">Crea experiencias inmersivas</p>
+          <h1>Tour360 Studio</h1>
+          <p class="hero-subtitle">
+            Construye tours 360° minimalistas en minutos. Sube tus escenas,
+            posiciona hotspots y comparte el resultado con una sola URL.
+          </p>
+        </div>
+      </header>
+
+      <section class="creation-panel" id="createPanel">
+        <form id="createTourForm" class="card">
+          <h2>Comienza un nuevo tour</h2>
+          <div class="field">
+            <label for="tourName">Nombre de la carpeta *</label>
+            <input
+              type="text"
+              id="tourName"
+              name="tourName"
+              placeholder="ej. showroom-neon"
+              autocomplete="off"
+              required
+            />
+            <small>
+              Solo letras, números y guiones. Así se verá tu enlace:
+              <span id="slugPreview">tu-dominio/carpeta</span>
+            </small>
+          </div>
+          <div class="field">
+            <label for="tourTitle">Título visible (opcional)</label>
+            <input
+              type="text"
+              id="tourTitle"
+              name="tourTitle"
+              placeholder="Nombre para tus visitantes"
+            />
+          </div>
+          <button class="primary" type="submit">Crear tour</button>
+          <p class="hint">
+            Si el tour ya existe, lo abriremos para seguir editando.
+          </p>
+        </form>
+      </section>
+
+      <section class="workspace hidden" id="workspace">
+        <aside class="sidebar">
+          <div class="sidebar-header">
+            <h2>Escenas 360°</h2>
+            <p class="muted">
+              Sube panorámicas equirectangulares en JPG, PNG o WEBP.
+            </p>
+          </div>
+          <label class="upload-label">
+            <input type="file" id="sceneUpload" accept="image/*" />
+            <span>Subir nueva escena</span>
+          </label>
+          <div class="sidebar-info">
+            <p id="tourFolderInfo"></p>
+            <a
+              id="tourPublicLink"
+              class="tour-link hidden"
+              href="#"
+              target="_blank"
+              rel="noopener"
+            ></a>
+          </div>
+          <ul class="scene-list" id="scenesList"></ul>
+        </aside>
+        <section class="viewer-area">
+          <div class="viewer-header">
+            <div>
+              <h2 id="currentSceneTitle">Selecciona una escena</h2>
+              <p id="viewerHint" class="muted"></p>
+            </div>
+            <div class="viewer-actions">
+              <button class="ghost" type="button" id="addHotspot">
+                Añadir hotspot
+              </button>
+              <button class="primary" type="button" id="saveTour">
+                Guardar tour
+              </button>
+            </div>
+          </div>
+          <div class="viewer-shell">
+            <div id="viewer" class="viewer"></div>
+            <div id="placingNotice" class="placing hidden">
+              Haz clic sobre la escena para posicionar el hotspot
+            </div>
+          </div>
+          <div class="hotspots-panel">
+            <div class="hotspots-head">
+              <h3>Hotspots de la escena</h3>
+              <span id="hotspotCount" class="muted"></span>
+            </div>
+            <ul class="hotspot-list" id="hotspotsList"></ul>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div class="modal hidden" id="sceneModal" role="dialog" aria-modal="true">
+      <div class="modal-content">
+        <h3>Nombrar escena</h3>
+        <p class="muted" id="sceneFileName"></p>
+        <label class="field">
+          <span>Nombre</span>
+          <input type="text" id="sceneNameInput" placeholder="Vista principal" />
+        </label>
+        <div class="modal-actions">
+          <button class="ghost" type="button" id="cancelSceneModal">Cancelar</button>
+          <button class="primary" type="button" id="confirmSceneModal">Subir escena</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="hotspotModal" role="dialog" aria-modal="true">
+      <div class="modal-content">
+        <h3>Configurar hotspot</h3>
+        <label class="field">
+          <span>Etiqueta</span>
+          <input type="text" id="hotspotLabel" placeholder="Ej. Ir a lobby" />
+        </label>
+        <label class="field">
+          <span>Escena destino</span>
+          <select id="hotspotTarget"></select>
+        </label>
+        <div class="modal-actions">
+          <button class="ghost" type="button" id="cancelHotspot">Cancelar</button>
+          <button class="primary" type="button" id="confirmHotspot">Guardar hotspot</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uevent@2.0.0/browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4.0.6/dist/photo-sphere-viewer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4.0.6/dist/plugins/markers.min.js"></script>
+    <script type="module" src="/js/index.js"></script>
+  </body>
+</html>
