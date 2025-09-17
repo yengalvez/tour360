@@ -1,0 +1,11 @@
+{
+  "name": "tour360-studio",
+  "version": "1.0.0",
+  "description": "Constructor minimalista de tours 360° con hotspots interactivos.",
+  "scripts": {
+    "start": "php -S 0.0.0.0:8000 -t public"
+  },
+  "keywords": ["360", "tour", "viewer", "panorama"],
+  "author": "",
+  "license": "MIT"
+}

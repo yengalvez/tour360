@@ -1,0 +1,57 @@
+<?php
+declare(strict_types=1);
+$slug = isset($_GET['slug']) ? (string) $_GET['slug'] : '';
+$slugAttr = htmlspecialchars($slug, ENT_QUOTES, 'UTF-8');
+?>
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Explorar tour 360</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4.0.6/dist/photo-sphere-viewer.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4.0.6/dist/plugins/markers.min.css"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="viewer-body">
+    <main class="viewer-app">
+      <header class="viewer-bar">
+        <div class="viewer-texts">
+          <p class="hero-kicker" id="tourPath"></p>
+          <h1 id="tourTitle">Cargando tour...</h1>
+          <p class="hero-subtitle" id="tourSubtitle">
+            Recorre el espacio con los hotspots interactivos.
+          </p>
+        </div>
+        <div class="viewer-controls">
+          <label for="sceneSelect">Escena</label>
+          <select id="sceneSelect" disabled></select>
+        </div>
+      </header>
+      <section class="viewer-stage">
+        <div id="viewer" class="viewer"></div>
+        <div id="viewerMessage" class="viewer-message hidden"></div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uevent@2.0.0/browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4.0.6/dist/photo-sphere-viewer.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4.0.6/dist/plugins/markers.min.js"></script>
+    <script src="/js/three-math-shim.js"></script>
+    <script>window.__TOUR_SLUG__ = '<?= $slugAttr ?>';</script>
+    <script type="module" src="/js/viewer.js"></script>
+  </body>
+</html>
