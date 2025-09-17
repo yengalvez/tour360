@@ -124,11 +124,10 @@ function initializeViewer(initialScene) {
     }
   });
 
-  markersPlugin.on('select-marker', (marker) => {
-    if (!marker) return;
-    const targetId = (marker.config && marker.config.data && marker.config.data.targetSceneId)
-      || (marker.data && marker.data.targetSceneId)
-      || null;
+  markersPlugin.on('select-marker', (_event, marker) => {
+    const targetId = marker?.config?.data?.targetSceneId
+      ?? marker?.data?.targetSceneId
+      ?? null;
     if (targetId) {
       setScene(targetId);
       sceneSelect.value = targetId;

@@ -351,6 +351,7 @@ button.danger:hover:not(:disabled) {
   text-transform: uppercase;
   color: var(--accent);
   background: rgba(9, 12, 31, 0.78);
+  pointer-events: none;
 }
 
 .hotspots-panel {
