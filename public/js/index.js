@@ -13,10 +13,6 @@ let pendingCoords = null;
 let pendingSceneFile = null;
 let toastTimeout = null;
 
-if (window.THREE && !THREE.Math && THREE.MathUtils) {
-  THREE.Math = THREE.MathUtils;
-}
-
 const createForm = document.getElementById('createTourForm');
 const createPanel = document.getElementById('createPanel');
 const workspace = document.getElementById('workspace');

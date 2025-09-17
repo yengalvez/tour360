@@ -10,10 +10,6 @@ let markersPlugin = null;
 let scenes = [];
 let currentSceneId = null;
 
-if (window.THREE && !THREE.Math && THREE.MathUtils) {
-  THREE.Math = THREE.MathUtils;
-}
-
 function normalizeOrigin() {
   return window.location.origin && window.location.origin !== 'null'
     ? window.location.origin
